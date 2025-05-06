@@ -24,4 +24,9 @@ poetry shell
 Данный проект содержит:
 * приложение под названием "catalog";
 * три HTML-шаблона: для домашней страницы (home.html), для страницы с контактной информацией (contacts.html)
-и шаблон для успешной отправки данных (contact_success.html).
+и шаблон для успешной отправки данных (contact_success.html;
+* модели Product и Category с базовыми настройками (models.py);
+* файл с миграциями (migrations/0001_initial.py);
+* фикстуры для моделей Category и Product (category_fixture.json);
+* создана кастомная команда для добавления тестовых продуктов (add_test_products.py);
+* 
