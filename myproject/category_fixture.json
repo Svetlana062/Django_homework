@@ -1,0 +1,31 @@
+[
+{
+    "model": "catalog.category",
+    "pk": 8,
+    "fields": {
+        "name": "Электроника",
+        "description": "Устройства и гаджеты"
+    }
+},
+{
+    "model": "catalog.category",
+    "pk": 9,
+    "fields": {
+        "name": "Одежда",
+        "description": "Одежда и аксессуары"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 8,
+    "fields": {
+        "name": "Смартфон",
+        "description": "Последняя модель смартфона",
+        "image": "path/to/image.jpg",
+        "category": 8,
+        "price": "26649.99",
+        "created_at": "2025-05-05T17:28:22.904Z",
+        "updated_at": "2025-05-05T17:32:07.746Z"
+    }
+}
+]
