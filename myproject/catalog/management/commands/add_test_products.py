@@ -8,9 +8,11 @@ from catalog.models import Product, Category
 
 
 class Command(BaseCommand):
-    help = 'Load test data into the database'
+    """Кастомная команда."""
+    help = 'Загрузить тестовые данные в базу данных'
 
     def handle(self, *args, **kwargs):
+        """Кастомная команда для удаления и добавления тестовых продуктов."""
         # Удаляем существующие данные перед загрузкой новых данных.
         Product.objects.all().delete()
         Category.objects.all().delete()
