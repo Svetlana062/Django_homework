@@ -1,0 +1,15 @@
+{% extends 'catalog/base.html' %}
+
+{% block title %}{{ action }} статью{% endblock %}
+
+{% block content %}
+<h1>{{ action }} статью</h1>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Сохранить</button>
+    <a class="btn btn-secondary" href="{{ object.get_absolute_url }}">Отмена</a>
+</form>
+
+{% endblock %}
