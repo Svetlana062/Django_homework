@@ -1,16 +1,14 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
-from django.views.generic import TemplateView
 
-from . import views
-
+from .views import HomeView, ContactView, ContactSuccessView, ProductDetailView
 
 urlpatterns = [
-    path('', views.home, name='home'),
-    path('contacts/', views.contacts, name='contacts'),
-    path('contacts/success/', TemplateView.as_view(template_name='catalog/contact_success.html'), name='contact_success'),
-    path('product/<int:pk>/', views.product_detail, name='product_detail'),
+    path('', HomeView.as_view(), name='home'),
+    path('contacts/', ContactView.as_view(), name='contacts'),
+    path('contacts/success/', ContactSuccessView.as_view(), name='contact_success'),
+    path('product/<int:pk>/', ProductDetailView.as_view(), name='product_detail'),
 ]
 
 if settings.DEBUG:
