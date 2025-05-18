@@ -46,6 +46,11 @@ class BlogCreateView(CreateView):
     template_name = 'blog/blog_form.html'
     success_url = reverse_lazy('blog:list')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['action'] = 'Создать'
+        return context
+
     def form_valid(self, form):
         action = self.request.POST.get('action')
         if action == 'save_draft':
@@ -64,6 +69,11 @@ class BlogUpdateView(UpdateView):
     def get_success_url(self):
         """Перенаправление на страницу просмотра редактируемой статьи после сохранения."""
         return reverse('blog:detail', kwargs={'pk': self.object.pk})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['action'] = 'Редактировать'
+        return context
 
 
 class BlogDeleteView(DeleteView):
