@@ -41,18 +41,27 @@
                 <div class="card-body">
                     <form method="post" action="{% url 'contacts' %}">
                         {% csrf_token %}
+
+                        <!-- Имя -->
                         <div class="mb-3">
                             <label for="{{ form.name.id_for_label }}">Имя</label>
                             {{ form.name }}
+
                         </div>
+
+                        <!-- Телефон -->
                         <div class="mb-3">
                             <label for="{{ form.phone.id_for_label }}">Телефон</label>
                             {{ form.phone }}
                         </div>
+
+                        <!-- Сообщение -->
                         <div class="mb-3">
                             <label for="{{ form.message.id_for_label }}">Сообщение</label>
                             {{ form.message }}
                         </div>
+
+                        <!-- Кнопка -->
                         <button type="submit" class="btn btn-lg btn-block btn-outline-primary">Отправить</button>
                     </form>
                 </div>

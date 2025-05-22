@@ -1,29 +1,36 @@
-from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+from django.views.generic import ListView, FormView, TemplateView, DetailView
+
 from .forms import ContactForm
-from django.shortcuts import render, get_object_or_404
 from .models import Product
 
 
-def home(request):
-    products = Product.objects.all()
-    return render(request, 'catalog/home.html', {'products': products})
+class HomeView(ListView):
+    model = Product
+    template_name = 'catalog/home.html'
+    context_object_name = 'products'
 
-def contacts(request):
-    if request.method == 'POST':
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            # Обработка данных формы
-            print(form.cleaned_data)  # Для теста
-            return redirect('contact_success')  # Название URL для страницы успеха
-    else:
-        form = ContactForm()
 
-    return render(request, 'catalog/contacts.html', {'form': form})
+class ContactView(FormView):
+    template_name = 'catalog/contacts.html'
+    form_class = ContactForm
+    success_url = reverse_lazy('contact_success')
 
-def contact_success(request):
-    return render(request, 'catalog/contact_success.html')
+    def form_valid(self, form):
+        print(form.cleaned_data) # для теста
+        return super().form_valid(form)
 
-def product_detail(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    return render(request, 'catalog/product_detail.html', {'product': product})
+    def form_invalid(self, form):
+        response =super().form_invalid(form)
+        response.context_data['error_message'] = "Пожалуйста, исправьте ошибки в форме."
+        return response
 
+
+class ContactSuccessView(TemplateView):
+    template_name = 'catalog/contact_success.html'
+
+
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'catalog/product_detail.html'
+    context_object_name = 'product'

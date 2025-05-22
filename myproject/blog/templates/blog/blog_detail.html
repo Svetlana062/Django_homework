@@ -1,0 +1,23 @@
+{% extends 'catalog/base.html' %}
+
+{% block title %}{{ object.title }}{% endblock %}
+
+{% block content %}
+<h1>{{ object.title }}</h1>
+
+{% if object.preview_image %}
+    <img src="{{ object.preview_image.url }}" alt="Preview Image" class="img-fluid mb-3">
+{% else %}
+    <!-- Можно вывести сообщение или оставить пустым -->
+    <p>Нет изображения</p>
+{% endif %}
+<p>{{ object.content }}</p>
+
+<p>Просмотры: {{ object.views_count }}</p>
+
+<a class="btn btn-primary" href="{% url 'blog:update' object.pk %}">Редактировать</a>
+<a class="btn btn-danger" href="{% url 'blog:delete' object.pk %}">Удалить</a>
+
+<a class="btn btn-secondary" href="{% url 'blog:list' %}">К списку статей</a>
+
+{% endblock %}

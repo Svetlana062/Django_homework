@@ -24,7 +24,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'catalog',
+    'catalog', # мною созданное приложение
+    'blog' # мною созданное приложение
 ]
 
 MIDDLEWARE = [
