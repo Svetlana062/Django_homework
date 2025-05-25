@@ -16,7 +16,9 @@
   <tbody>
     {% for product in products %}
     <tr>
-      <td>{{ product.name }}</td>
+      <td>
+        <a href="{% url 'product_detail' pk=product.pk %}">{{ product.name }}</a>
+      </td>
       <td>{{ product.category.name }}</td>
       <td>{{ product.price }}</td>
       <td>
@@ -26,7 +28,10 @@
           Нет изображения
         {% endif %}
       </td>
+
+      <!-- Кнопки просмотра, редактирования и удаления -->
       <td>
+        <a class="btn btn-sm btn-outline-secondary" href="{% url 'product_detail' pk=product.pk %}">Просмотр</a>
         <a class="btn btn-sm btn-outline-primary" href="{% url 'product_edit' product.pk %}">Редактировать</a>
         <a class="btn btn-sm btn-outline-danger" href="{% url 'product_delete' product.pk %}">Удалить</a>
       </td>

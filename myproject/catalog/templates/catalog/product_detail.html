@@ -9,5 +9,11 @@
     <p><strong>Описание:</strong> {{ product.description }}</p>
     <p><strong>Цена:</strong> {{ product.price }} руб.</p>
     <p><strong>Категория:</strong> {{ product.category.name }}</p>
+
+    <!-- Кнопки редактирования и удаления -->
+    <div class="d-flex align-items-center mt-3">
+        <a class="btn btn-sm btn-outline-primary me-2" href="{% url 'product_edit' product.pk %}">Редактировать</a>
+        <a class="btn btn-sm btn-outline-danger" href="{% url 'product_delete' product.pk %}">Удалить</a>
+    </div>
 </div>
 {% endblock %}
