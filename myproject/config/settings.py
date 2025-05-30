@@ -24,8 +24,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'catalog', # мною созданное приложение
-    'blog' # мною созданное приложение
+    'catalog', # приложение для просмотра и редактирования продуктов
+    'blog', # приложение для просмотра и ведения блога
+    'accounts', # приложение для регистрации пользователей
 ]
 
 MIDDLEWARE = [
@@ -116,3 +117,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# использование кастомной модели пользователя для авторизации
+AUTH_USER_MODEL = 'accounts.CustomUser'
