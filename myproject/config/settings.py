@@ -120,3 +120,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # использование кастомной модели пользователя для авторизации
 AUTH_USER_MODEL = 'accounts.CustomUser'
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+# Настройки почты (для отправки писем)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

@@ -3,9 +3,36 @@
     <nav class="ms-5">
         <a class="p-2 btn btn-outline-primary" href="/">Каталог</a>
         <a class="p-2 btn btn-outline-primary" href="/contacts/">Контакты</a>
+
         <!-- Кнопка для перехода в блог -->
         <a class="p-2 btn btn-outline-primary" href="{% url 'blog:list' %}">Перейти к блогу</a>
-        <!--кнопку для перехода на список продуктов-->
+        <!--Кнопка для перехода на список продуктов-->
         <a class="p-2 btn btn-outline-primary" href="{% url 'product_list' %}">Список продуктов</a>
+
+        <!--Кнопка для просмотра/входа пользователя-->
+        {% if user.is_authenticated %}
+            <!-- Профиль -->
+            <a class="p-2 btn btn-primary" href="{% url 'view_profile' %}">Профиль</a>
+            <!-- Выхода через POST-запрос -->
+            <form method="post" action="{% url 'logout' %}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit"
+                        class="p-2 btn btn-outline-primary"
+                        style="
+                            background-color: #6c757d;
+                            color: #fff;
+                            padding: 0.375rem 0.75rem;
+                            border-radius: 0.25rem;
+                            border:none;"
+                        onmouseover="this.style.backgroundColor='#5a6268';"
+                        onmouseout="this.style.backgroundColor='#6c757d';">
+                    Выход
+                </button>
+            </form>
+        {% else %}
+            <!-- Пользователь не вошел -->
+            <a class="p-2 btn btn-outline-primary" href="{% url 'login' %}">Войти в профиль</a>
+
+        {% endif %}
     </nav>
 </div>
