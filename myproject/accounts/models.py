@@ -10,7 +10,7 @@ class CustomUser(AbstractUser):
     username = models.CharField(max_length=15, blank=True, null=True, verbose_name='Имя', help_text='Введите имя пользователя')
 
     USERNAME_FIELD = 'email'  # делаем email полем для входа
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['username']
 
     class Meta:
         verbose_name = 'Пользователь'
