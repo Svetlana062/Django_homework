@@ -6,7 +6,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('catalog.urls')), # подключение URL-ов приложения catalog
-    path('blog/', include('blog.urls')),
+    path('blog/', include('blog.urls')), # подключение URL-ов приложения blog
+    path('accounts/', include('accounts.urls')), # подключение URL-ов приложения accounts
 ]
 
 # Обслуживание медиафайлов при DEBUG
