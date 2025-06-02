@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -60,7 +61,7 @@ class BlogCreateView(CreateView):
         return super().form_valid(form)
 
 
-class BlogUpdateView(UpdateView):
+class BlogUpdateView(LoginRequiredMixin, UpdateView):
     """Редактирование статьи с перенаправлением на просмотр после успешного редактирования."""
     model = BlogPost
     form_class = BlogPostForm
@@ -76,7 +77,7 @@ class BlogUpdateView(UpdateView):
         return context
 
 
-class BlogDeleteView(DeleteView):
+class BlogDeleteView(LoginRequiredMixin, DeleteView):
     """Удаление статьи."""
     model = BlogPost
     template_name = 'blog/blog_confirm_delete.html'
