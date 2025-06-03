@@ -5,7 +5,9 @@
 {% block content %}
 <h1>Статьи</h1>
 
+{% if is_content_manager %}
 <a class="btn btn-primary mb-3" href="{% url 'blog:create' %}">Создать новую статью</a>
+{% endif %}
 
 <table class="table table-striped">
     <thead>
@@ -22,8 +24,10 @@
             <td>{{ post.views_count }}</td>
             <td>
                 <a class="btn btn-sm btn-outline-secondary" href="{{ post.get_absolute_url }}">Просмотр</a>
-                <a class="btn btn-sm btn-outline-primary" href="{% url 'blog:update' post.pk %}">Редактировать</a>
-                <a class="btn btn-sm btn-outline-danger" href="{% url 'blog:delete' post.pk %}">Удалить</a>
+                {% if is_content_manager %}
+                    <a class="btn btn-sm btn-outline-primary" href="{% url 'blog:update' post.pk %}">Редактировать</a>
+                    <a class="btn btn-sm btn-outline-danger" href="{% url 'blog:delete' post.pk %}">Удалить</a>
+                {% endif %}
             </td>
         </tr>
         {% empty %}
