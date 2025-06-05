@@ -18,6 +18,7 @@
   <!-- Обертка для кнопок -->
   <div style="display: flex; gap: 10px; align-items: center; margin-top: 20px;">
     <button type="submit" name="save" value="save" class="btn btn-primary">Сохранить</button>
+
     <!-- Условие для отображения кнопки "Удалить" -->
     {% if view.object and view.object.pk %}
         <a href="{% url 'product_delete' view.object.pk %}" class="btn btn-outline-danger">Удалить</a>

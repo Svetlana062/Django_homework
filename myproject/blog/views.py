@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.mail import send_mail
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -12,6 +12,13 @@ class BlogListView(ListView):
     model = BlogPost
     template_name = 'blog/blog_list.html'
     context_object_name = 'posts'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        # Проверяем, входит ли пользователь в группу 'Content Manager'
+        context['is_content_manager'] = user.is_authenticated and user.groups.filter(name='Content Manager').exists()
+        return context
 
     def get_queryset(self):
         """Фильтрация опубликованных статей."""
@@ -39,8 +46,21 @@ class BlogDetailView(DetailView):
             )
         return obj
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        # Проверяем, входит ли пользователь в группу 'Content Manager'
+        context['is_content_manager'] = user.is_authenticated and user.groups.filter(name='Content Manager').exists()
+        return context
 
-class BlogCreateView(CreateView):
+
+class UserIsContentManagerMixin(UserPassesTestMixin):
+    """Миксин для проверки, что пользователь — контент-менеджер."""
+    def test_func(self):
+        return self.request.user.groups.filter(name='Content Manager').exists()
+
+
+class BlogCreateView(LoginRequiredMixin, UserIsContentManagerMixin, CreateView):
     """Создание новой статьи."""
     model = BlogPost
     form_class = BlogPostForm
@@ -61,7 +81,7 @@ class BlogCreateView(CreateView):
         return super().form_valid(form)
 
 
-class BlogUpdateView(LoginRequiredMixin, UpdateView):
+class BlogUpdateView(LoginRequiredMixin, UserIsContentManagerMixin,UpdateView):
     """Редактирование статьи с перенаправлением на просмотр после успешного редактирования."""
     model = BlogPost
     form_class = BlogPostForm
@@ -77,7 +97,7 @@ class BlogUpdateView(LoginRequiredMixin, UpdateView):
         return context
 
 
-class BlogDeleteView(LoginRequiredMixin, DeleteView):
+class BlogDeleteView(LoginRequiredMixin, UserIsContentManagerMixin, DeleteView):
     """Удаление статьи."""
     model = BlogPost
     template_name = 'blog/blog_confirm_delete.html'

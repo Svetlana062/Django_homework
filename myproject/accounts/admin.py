@@ -1,3 +1,11 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from .models import CustomUser
 
-# Register your models here.
+@admin.register(CustomUser)
+class CustomUserAdmin(UserAdmin):
+    model = CustomUser
+    list_display = ('id', 'email', 'username', 'is_staff', 'is_active')
+    search_fields = ('email', 'username')
+    ordering = ('email',)
+    # Можно дополнительно настроить поля для редактирования и отображения

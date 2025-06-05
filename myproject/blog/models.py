@@ -3,6 +3,7 @@ from django.urls import reverse
 
 
 class BlogPost(models.Model):
+    """Модель, которая описывает структуру данных для хранения информации о блоговых записях в базе данных."""
     title = models.CharField(max_length=200, verbose_name='Заголовок')
     content = models.TextField(verbose_name='Содержимое')
     preview_image = models.ImageField(upload_to='previews/', verbose_name='Превью', blank=True, null=True)

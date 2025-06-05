@@ -11,9 +11,14 @@
     <p><strong>Категория:</strong> {{ product.category.name }}</p>
 
     <!-- Кнопки редактирования и удаления -->
-    <div class="d-flex align-items-center mt-3">
-        <a class="btn btn-sm btn-outline-primary me-2" href="{% url 'product_edit' product.pk %}">Редактировать</a>
-        <a class="btn btn-sm btn-outline-danger" href="{% url 'product_delete' product.pk %}">Удалить</a>
-    </div>
+    {% if user.is_authenticated and product.can_edit %}
+        <a class="btn btn-primary" href="{% url 'product_edit' product.pk %}">Редактировать</a>
+
+        <!-- Форма для удаления -->
+        <form action="{% url 'product_delete' product.pk %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Удалить</button>
+        </form>
+    {% endif %}
 </div>
 {% endblock %}
