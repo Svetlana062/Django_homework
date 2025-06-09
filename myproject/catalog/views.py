@@ -1,20 +1,31 @@
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.core.cache import cache
 from django.core.mail import send_mail
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from django.views.generic import ListView, FormView, TemplateView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 
 from .forms import ProductForm
 from .forms import ContactForm
-from .models import Product
+from .models import Product, Category
 
+from django.views.generic import ListView
+from .services import get_products_by_category
 
 class HomeView(ListView):
     """Главная страница каталога, отображает список продуктов."""
     model = Product
     template_name = 'catalog/home.html'
     context_object_name = 'products'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()  # Получаем все категории
+        return context
 
 
 class ContactView(FormView):
@@ -58,6 +69,7 @@ class ContactSuccessView(TemplateView):
     template_name = 'catalog/contact_success.html'
 
 
+@method_decorator(cache_page(60*15),'dispatch')
 class ProductDetailView(LoginRequiredMixin, DetailView):
     """Страница с подробным описанием конкретного продукта."""
     model = Product
@@ -115,14 +127,25 @@ class ProductListView(ListView):
     context_object_name = 'products'
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        cache_key = 'published_product_ids'
+        product_ids = cache.get(cache_key)
+        if product_ids is None:
+            # Получаем IDs продуктов со статусом 'published'
+            product_ids = list(
+                super().get_queryset().filter(status='published').values_list('id', flat=True)
+            )
+            cache.set(cache_key, product_ids, 60 * 5)
+        # Получаем объекты по списку ID
+        queryset = Product.objects.filter(id__in=product_ids)
+
+        # Обогащение объектов can_edit
         user = self.request.user
         for product in queryset:
-            # Проверка: пользователь — владелец или есть разрешение
             product.can_edit = (
                     user.is_authenticated and
                     (product.owner == user or user.has_perm('catalog.delete_product'))
             )
+
         return queryset
 
 
@@ -139,3 +162,27 @@ class ProductUnpublishView(PermissionRequiredMixin, UpdateView):
         product.status = 'unpublished'  # или is_published=False при BooleanField
         product.save()
         return super().form_valid(form)
+
+
+class ProductsByCategoryView(ListView):
+    """Представление для отображения списка продуктов, принадлежащих
+    определенной категории."""
+    template_name = 'catalog/products_by_category.html'
+    context_object_name = 'products'
+
+    def get_queryset(self):
+        """Получает список продуктов, принадлежащих категории с указанным ID."""
+        category_id = self.kwargs['category_id']
+        queryset = get_products_by_category(category_id)
+        print(f"Category ID: {category_id}, Products: {list(queryset)}")
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        """Передаём текущую категорию."""
+        context = super().get_context_data(**kwargs)
+        category_id = self.kwargs['category_id']
+        current_category = get_object_or_404(Category, id=category_id)
+        context['current_category'] = current_category
+        # Передаётся список всех категорий для меню
+        context['categories'] = Category.objects.all()
+        return context
