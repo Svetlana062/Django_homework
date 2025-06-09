@@ -5,6 +5,18 @@
 {% block content %}
 <div class="container my-4">
     <h1 class="mb-4">Каталог товаров</h1>
+
+    <!-- Выпадающее меню категорий -->
+    <div class="mb-4">
+        <label for="categorySelect">Выберите категорию:</label>
+        <select id="categorySelect" class="form-select" onchange="location = this.value;">
+            <option value="">Все категории</option>
+            {% for category in categories %}
+                <option value="{% url 'products_in_category' category_id=category.id %}">{{ category.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
     <div class="row">
         {% for product in products %}
         <div class="col-md-4 mb-4">
