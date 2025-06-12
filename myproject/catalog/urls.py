@@ -11,6 +11,7 @@ from .views import (
     ProductUpdateView,
     ProductDeleteView,
     ProductListView,
+    ProductsByCategoryView,
 )
 
 
@@ -26,6 +27,7 @@ urlpatterns = [
     path('product/add/', ProductCreateView.as_view(), name='product_add'),
     path('product/<int:pk>/edit/', ProductUpdateView.as_view(), name='product_edit'),
     path('product/<int:pk>/delete/', ProductDeleteView.as_view(), name='product_delete'),
+    path('category/<int:category_id>/products/', ProductsByCategoryView.as_view(), name='products_in_category'),
 ]
 
 # Обслуживание медиафайлов при DEBUG

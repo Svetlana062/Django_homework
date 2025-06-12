@@ -132,3 +132,11 @@ EMAIL_USE_TLS = True
 
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+
+# Кеширование. Используем Redis в качестве кеша
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache', # использование бэкенда, который предоставляет Django
+        'LOCATION': 'redis://127.0.0.1:6379/1', # расположение Redis-сервера.
+    }
+}
